@@ -3,12 +3,19 @@ package it.SWEasabi.management;
 
 import org.json.JSONObject;
 
+import com.google.gson.JsonObject;
+
+import it.SWEasabi.management.kernel.LampManager;
 import it.SWEasabi.management.services.AccessKeyService;
+import it.SWEasabi.management.services.DBLampManagerService;
+import it.SWEasabi.management.services.DatabaseConnectionService;
 import it.SWEasabi.management.services.LocalAccessKeyService;
+import it.SWEasabi.management.services.LocalDatabaseConnectionService;
 
 public class Context 
 {
     static AccessKeyService keys = new LocalAccessKeyService();
+    static LampManager manager = new LampManager(new DBLampManagerService(new LocalDatabaseConnectionService()));
     
     public static String listener(String json)
     {
@@ -36,30 +43,19 @@ public class Context
         obj.put("errore", "JSON non valido");
         return obj.toString();
     }
-    /*
-    private static String login(String json)
+    
+    public static String getLamp(int id)
     {
-        try
-        {
-            JSONObject jsonObject = new JSONObject(json);
-            String username = jsonObject.getString("username");
-            String password = jsonObject.getString("password");
-            if(Authenticator.authenticate(userService, username, password))
-            {
-                String refreshJwt = issuer.issueRefreshToken(username);
-                String accessJwt = issuer.issueAccessToken(refreshJwt);
-
-                JSONObject obj = new JSONObject();
-                obj.put("refresh", refreshJwt);
-                obj.put("access", accessJwt);
-                return obj.toString();
-            }
-        }
-        catch (Exception e) {}
-        // errore credenziali/json
-        JSONObject obj = new JSONObject();
-        obj.put("errore", "Credenziali errate o mancanti");
-        return obj.toString();
+    	return manager.getLamp(id);
     }
-    */
+    
+    public static boolean insertLamp(JsonObject json)
+    {
+    	int idArea = Integer.parseInt(json.get("idarea").toString());
+    	double longitudine = Double.parseDouble(json.get("latitudine").toString());
+    	double latitudine = Double.parseDouble(json.get("longitudine").toString());
+    	int valore = Integer.parseInt(json.get("valore").toString());
+    	return manager.insertLamp(idArea, longitudine, latitudine, valore);
+    }
+    
 }
