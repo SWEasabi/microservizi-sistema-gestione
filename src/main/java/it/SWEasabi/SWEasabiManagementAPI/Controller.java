@@ -20,8 +20,7 @@ public class Controller {
 	  Controller() {
 	  }
 	  
-	  
-	  
+	  /*
 	  @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 	  @GetMapping("/login")
 	  String CheckCredentials(@RequestBody String credentials) {
@@ -30,7 +29,6 @@ public class Controller {
 				rq.addProperty("function", "login");
 				
 				return Context.listener(rq.toString());
-	  }
-	  
-	  
+	  }  
+	  */
 }
