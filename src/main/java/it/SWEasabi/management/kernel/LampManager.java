@@ -1,23 +1,36 @@
 package it.SWEasabi.management.kernel;
 
-import it.SWEasabi.management.services.LampManagerService;
+import java.util.List;
+
+import it.SWEasabi.management.DTO.Lamp;
+import it.SWEasabi.management.services.DatabaseConnectionService;
 
 public class LampManager {
 
-	private LampManagerService manager;
+	private DatabaseConnectionService dbservice;
 	
-	public LampManager(LampManagerService Manager)
+	public LampManager( DatabaseConnectionService db)
 	{
-		manager = Manager;
+		dbservice = db;
 	}
 	
-	public String getLamp(int id)
+	public Lamp getLamp(int id)
 	{
-		return manager.getLamp(id);
+		return dbservice.selectLamp(id);
+	}
+	
+	public List<Lamp> getLampsInArea(int idArea)
+	{
+		return dbservice.selectLampsInArea(idArea);
 	}
 	
 	public boolean insertLamp(int idArea, double lgt, double lat, int valore)
 	{
-		return manager.addLamp(idArea, lgt, lat, valore);
+		return dbservice.insertLamp(idArea, lgt, lat, valore);
+	}
+	
+	public boolean deleteLamp(int id)
+	{
+		return dbservice.deleteLamp(id);
 	}
 }
