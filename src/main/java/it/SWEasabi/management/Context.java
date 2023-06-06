@@ -8,16 +8,20 @@ import it.SWEasabi.management.DTO.Lamp;
 import it.SWEasabi.management.DTO.Sensor;
 import it.SWEasabi.management.kernel.LampManager;
 import it.SWEasabi.management.kernel.SensorManager;
+import it.SWEasabi.management.port.DTOBuilderService;
 import it.SWEasabi.management.port.LocalDTOBuilderService;
 import it.SWEasabi.management.services.AccessKeyService;
+import it.SWEasabi.management.services.DatabaseConnectionService;
 import it.SWEasabi.management.services.LocalAccessKeyService;
 import it.SWEasabi.management.services.LocalDatabaseConnectionService;
 
 public class Context 
 {
     static AccessKeyService keys = new LocalAccessKeyService();
-    static LampManager lampManager = new LampManager(new LocalDatabaseConnectionService(new LocalDTOBuilderService()));
-    static SensorManager sensorManager = new SensorManager(new LocalDatabaseConnectionService(new LocalDTOBuilderService()));
+    static DTOBuilderService dtobuilder = new LocalDTOBuilderService();
+    static DatabaseConnectionService dbservice = new LocalDatabaseConnectionService(dtobuilder);
+    static LampManager lampManager = new LampManager(dbservice);
+    static SensorManager sensorManager = new SensorManager(dbservice);
     
     public static String listener(String json)
     {
