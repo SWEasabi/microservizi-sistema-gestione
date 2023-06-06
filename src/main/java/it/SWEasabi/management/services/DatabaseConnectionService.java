@@ -3,6 +3,7 @@ package it.SWEasabi.management.services;
 import java.sql.Connection;
 import java.util.List;
 
+import it.SWEasabi.management.DTO.Area;
 import it.SWEasabi.management.DTO.Lamp;
 import it.SWEasabi.management.DTO.Sensor;
 
@@ -21,4 +22,9 @@ public interface DatabaseConnectionService {
 	public Sensor selectSensor(int id);
 	public boolean insertSensor(int areaId, double longitude, double latitude, int brightness);
 	public boolean deleteSensor(int id);
+	public Area getArea(int id);
+	public List<Area> getAreaList();
+	public boolean editAreaName(int id);
+	public boolean insertArea(int id, String nome, boolean auto, int inf, int sup);
+	public boolean deleteArea(int id);
 }

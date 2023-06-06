@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import com.google.gson.JsonObject;*/
 
 import it.SWEasabi.management.DTO.Lamp;
-import it.SWEasabi.management.port.DTOBuilderService;
 
 
 public class DBLampManagerService implements LampManagerService {

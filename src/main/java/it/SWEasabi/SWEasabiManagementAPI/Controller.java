@@ -39,8 +39,8 @@ public class Controller {
 		  
 		JsonObject rq = new Gson().fromJson(data, JsonObject.class);
 		int idArea = Integer.parseInt(rq.get("idarea").toString());
-    	double longitudine = Double.parseDouble(rq.get("latitudine").toString());
-    	double latitudine = Double.parseDouble(rq.get("longitudine").toString());
+    	double longitudine = Double.parseDouble(rq.get("longitudine").toString());
+    	double latitudine = Double.parseDouble(rq.get("latitudine").toString());
     	int valore = Integer.parseInt(rq.get("valore").toString());
     	
 		return Context.insertLamp(idArea,longitudine,latitudine,valore);
@@ -67,8 +67,8 @@ public class Controller {
 		  
 		JsonObject rq = new Gson().fromJson(data, JsonObject.class);
 		int idArea = Integer.parseInt(rq.get("idarea").toString());
-    	double longitudine = Double.parseDouble(rq.get("latitudine").toString());
-    	double latitudine = Double.parseDouble(rq.get("longitudine").toString());
+    	double longitudine = Double.parseDouble(rq.get("longitudine").toString());
+    	double latitudine = Double.parseDouble(rq.get("latitudine").toString());
     	int valore = Integer.parseInt(rq.get("valore").toString());
     	
 		return Context.insertSensor(idArea,longitudine,latitudine,valore);
@@ -79,6 +79,20 @@ public class Controller {
 	  boolean deleteSensor(@PathVariable int id) {
     	
 		return Context.deleteSensor(id);
+	  }  
+	  
+	  @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+	  @GetMapping("/getArea/{id}")
+	  String GetArea(@PathVariable int id) {
+				
+			return Context.getArea(id);
+	  }  
+	  
+	  @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+	  @GetMapping("/getAreaList")
+	  String GetAreaList() {
+				
+			return Context.getAreaList();
 	  }  
 	  
 }

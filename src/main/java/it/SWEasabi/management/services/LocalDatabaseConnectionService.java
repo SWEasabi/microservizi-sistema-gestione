@@ -7,9 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import it.SWEasabi.management.port.DTOBuilderService;
-import it.SWEasabi.management.port.LocalDTOBuilderService;
 
+import it.SWEasabi.management.DTO.Area;
 import it.SWEasabi.management.DTO.Lamp;
 import it.SWEasabi.management.DTO.Sensor;
 
@@ -37,56 +36,9 @@ public class LocalDatabaseConnectionService implements DatabaseConnectionService
 
         return conn;
     }
-    
-    /*private Lamp lampFormatter(ResultSet lamp, ResultSet mis)
-    {
-    	try {
-    		int id = 0;
-    		int measurerId = 0;
-    		int brightness = 0;
-    		int areaId = 0;
-    		double longitude = 0.0;
-    		double latitude = 0.0;
-    		
-    		id = lamp.getInt("id");
-    		measurerId = mis.getInt("id");
-    		brightness = lamp.getInt("luminosita");
-
-    		areaId = mis.getInt("idarea");
-        	longitude = mis.getDouble("longitudine");
-        	latitude = mis.getDouble("latitudine");
-
-    		
-    		return new Lamp(id,measurerId,areaId,longitude,latitude,brightness);
-    		}
-    		catch(SQLException e)
-    		{
-    			e.printStackTrace();
-    			return new Lamp();
-    		}
-    }
-    
-    private Sensor sensorFormatter(ResultSet sensor, ResultSet mis)
-    {
-    	try {
-    		int id = sensor.getInt("id");
-    		int measurerId = sensor.getInt("idmisuratore");
-    		int brightness = sensor.getInt("luminosita");
-    		int areaId = mis.getInt("idarea");
-    		double longitude = mis.getDouble("longitudine");
-    		double latitude = mis.getDouble("latitudine");
-    		return new Sensor(id,measurerId,areaId,longitude,latitude,brightness);
-    		}
-    		catch(SQLException e)
-    		{
-    			e.printStackTrace();
-    			return new Sensor();
-    		}
-    }*/
 
 	public Lamp selectLamp(int id) {
 		try {
-		// TODO Auto-generated method stub
 		Connection conn = connect();
 		PreparedStatement stmt = conn.prepareStatement("SELECT * FROM lampione WHERE id = " + id);
 		ResultSet lmp = stmt.executeQuery();
@@ -130,7 +82,7 @@ public class LocalDatabaseConnectionService implements DatabaseConnectionService
 		try {
 		Connection conn = connect();
 		PreparedStatement stmt = conn.prepareStatement("INSERT INTO misuratore(idArea,latitudine, longitudine,tipo) VALUES (" + areaId + ", " + latitude + ", " + longitude + ", 'lampione');");
-		stmt.executeQuery();
+		stmt.executeUpdate();
 		stmt = conn.prepareStatement("SELECT MAX(id) AS id FROM misuratore");
 		ResultSet mis = stmt.executeQuery();
 		int misId = 0;
@@ -197,7 +149,7 @@ public class LocalDatabaseConnectionService implements DatabaseConnectionService
 		List<Sensor> output = new ArrayList<Sensor>();
 		try {
 			Connection conn = connect();
-			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM misuratore WHERE idArea = " + idArea + " AND tipo = 'lampione'");
+			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM misuratore WHERE idArea = " + idArea + " AND tipo = 'sensore'");
 			ResultSet misList = stmt.executeQuery();
 			while(misList.next())
 			{
@@ -214,11 +166,11 @@ public class LocalDatabaseConnectionService implements DatabaseConnectionService
 		return output;
 	}
 
-	public boolean insertSensor( int areaId, double longitude, double latitude, int brightness) {
+	public boolean insertSensor( int areaId, double longitude, double latitude, int radius) {
 		try {
 		Connection conn = connect();
 		PreparedStatement stmt = conn.prepareStatement("INSERT INTO misuratore(idArea,latitudine, longitudine,tipo) VALUES (" + areaId + ", " + latitude + ", " + longitude + ", 'sensore');");
-		stmt.executeQuery();
+		stmt.executeUpdate();
 		stmt = conn.prepareStatement("SELECT MAX(id) AS id FROM misuratore");
 		ResultSet mis = stmt.executeQuery();
 		int misId = 0;
@@ -226,7 +178,7 @@ public class LocalDatabaseConnectionService implements DatabaseConnectionService
 		{
 			misId = mis.getInt("id");
 		}
-		stmt = conn.prepareStatement("INSERT INTO sensore(idMisuratore,luminosita) VALUES (" + misId + ", " + brightness + ");");
+		stmt = conn.prepareStatement("INSERT INTO sensore(idMisuratore,raggio) VALUES (" + misId + ", " + radius + ");");
 		stmt.executeUpdate();
 		return true;
 		}
@@ -259,6 +211,63 @@ public class LocalDatabaseConnectionService implements DatabaseConnectionService
 			return false;
 		}
 	}
+
+	@Override
+	public Area getArea(int id) {
+		try {
+			Connection conn = connect();
+			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM area WHERE id = " + id);
+			ResultSet area = stmt.executeQuery();
+			conn.close();
+			area.next();
+			return service.buildAreaFromQueryResult(area);
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+				
+			}
+		return new Area();
+	}
+
+	@Override
+	public List<Area> getAreaList() {
+		List<Area> list = new ArrayList<Area>();
+		try {
+			Connection conn = connect();
+			PreparedStatement stmt = conn.prepareStatement("SELECT * FROM area");
+			ResultSet area = stmt.executeQuery();
+			while(area.next())
+			{
+				list.add(service.buildAreaFromQueryResult(area));
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public boolean editAreaName(int id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean insertArea(int id, String nome, boolean auto, int inf, int sup) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean deleteArea(int id) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	
     
     /*public ResultSet runSingleSelectQuery(String query)
     {

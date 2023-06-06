@@ -1,8 +1,9 @@
-package it.SWEasabi.management.port;
+package it.SWEasabi.management.services;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import it.SWEasabi.management.DTO.Area;
 import it.SWEasabi.management.DTO.Lamp;
 import it.SWEasabi.management.DTO.Sensor;
 
@@ -63,5 +64,30 @@ public Sensor buildSensorFromQueryResult(ResultSet lamp, ResultSet mis) {
     			return new Sensor();
     	}
 	}
+
+@Override
+public Area buildAreaFromQueryResult(ResultSet area) {
+	int id = 0;
+	String nome = "";
+	boolean auto = false;
+	int inf=0;
+	int sup=0;
+	try {
+	
+	id = area.getInt("id");
+	nome = area.getString("nome");
+	auto = area.getBoolean("automode");
+	inf = area.getInt("lvlinf");
+	sup = area.getInt("lvlsup");
+	}
+	catch(SQLException e)
+	{
+		e.printStackTrace();
+	}
+	return new Area(id,nome,auto,inf,sup);
+	
+}
+
+
 
 }
