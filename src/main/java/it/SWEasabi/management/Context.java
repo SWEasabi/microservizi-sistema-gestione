@@ -101,6 +101,11 @@ public class Context
     	return sensorManager.deleteSensor(id);
     }
     
+    public static boolean moveMeasurer(int idMis, int idArea)
+    {
+    	return areaManager.moveMeasurer(idMis, idArea);
+    }
+    
     public static String getArea(int id)
     {
     	Area area = areaManager.getArea(id);
@@ -132,6 +137,21 @@ public class Context
     	}
     	
     	return response;
+    }
+    
+    public static boolean editAreaName(int id, String nome)
+    {
+    	return areaManager.editAreaName(id, nome);
+    }
+    
+    public static boolean insertArea(String nome, boolean auto, int inf, int sup)
+    {
+    	return areaManager.insertArea(nome, auto, inf, sup);
+    }
+    
+    public static boolean deleteArea (int id)
+    {
+    	return areaManager.deleteArea(id);
     }
     
 }

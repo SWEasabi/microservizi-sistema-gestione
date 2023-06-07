@@ -22,9 +22,10 @@ public interface DatabaseConnectionService {
 	public Sensor selectSensor(int id);
 	public boolean insertSensor(int areaId, double longitude, double latitude, int brightness);
 	public boolean deleteSensor(int id);
+	public boolean moveMeasurer(int idMis, int idArea);
 	public Area getArea(int id);
 	public List<Area> getAreaList();
-	public boolean editAreaName(int id);
-	public boolean insertArea(int id, String nome, boolean auto, int inf, int sup);
+	public boolean editAreaName(int id, String nome);
+	public boolean insertArea(String nome, boolean auto, int inf, int sup);
 	public boolean deleteArea(int id);
 }

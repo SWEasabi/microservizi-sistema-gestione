@@ -17,7 +17,6 @@ public class Controller {
 	  Controller() {
 	  }
 	  
-
 	  @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 	  @GetMapping("/getLamp/{id}")
 	  String GetLamp(@PathVariable int id) {
@@ -82,6 +81,16 @@ public class Controller {
 	  }  
 	  
 	  @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+	  @PutMapping("/moveMeasurer/{id}")
+	  boolean moveMeasurer(@PathVariable int id, @RequestBody String data) {
+    	
+		JsonObject rq = new Gson().fromJson(data, JsonObject.class);
+		int idArea = Integer.parseInt(rq.get("idarea").toString());
+		  
+		return Context.moveMeasurer(id, idArea);
+	  }  
+	  
+	  @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 	  @GetMapping("/getArea/{id}")
 	  String GetArea(@PathVariable int id) {
 				
@@ -93,6 +102,36 @@ public class Controller {
 	  String GetAreaList() {
 				
 			return Context.getAreaList();
+	  }  
+	  
+	  @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+	  @PutMapping("/addArea")
+	  boolean AddArea(@RequestBody String data) {
+		  
+		JsonObject rq = new Gson().fromJson(data, JsonObject.class);
+		int idArea = Integer.parseInt(rq.get("idarea").toString());
+    	double longitudine = Double.parseDouble(rq.get("longitudine").toString());
+    	double latitudine = Double.parseDouble(rq.get("latitudine").toString());
+    	int valore = Integer.parseInt(rq.get("valore").toString());
+    	
+		return Context.insertSensor(idArea,longitudine,latitudine,valore);
+	  }  
+	  
+	  @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+	  @PutMapping("/editAreaName/{id}")
+	  boolean EditAreaName(@PathVariable int id, @RequestBody String data) {
+		  
+		JsonObject rq = new Gson().fromJson(data, JsonObject.class);
+		String nome = rq.get("nome").toString();
+    	
+		return Context.editAreaName(id,nome);
+	  }  
+	  
+	  @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
+	  @PutMapping("/deleteArea/{id}")
+	  boolean deleteArea(@PathVariable int id) {
+    	
+		return Context.deleteSensor(id);
 	  }  
 	  
 }

@@ -211,8 +211,21 @@ public class LocalDatabaseConnectionService implements DatabaseConnectionService
 			return false;
 		}
 	}
+	
+	public boolean moveMeasurer(int idMis, int idArea) {
+		try {
+			Connection conn = connect();
+			PreparedStatement stmt = conn.prepareStatement("UPDATE misuratore SET idarea = " + idArea + " WHERE id = " + idMis);
+			stmt.executeUpdate();
+			return true;
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return false;
+	}
 
-	@Override
 	public Area getArea(int id) {
 		try {
 			Connection conn = connect();
@@ -230,7 +243,6 @@ public class LocalDatabaseConnectionService implements DatabaseConnectionService
 		return new Area();
 	}
 
-	@Override
 	public List<Area> getAreaList() {
 		List<Area> list = new ArrayList<Area>();
 		try {
@@ -249,21 +261,50 @@ public class LocalDatabaseConnectionService implements DatabaseConnectionService
 		return list;
 	}
 
-	@Override
-	public boolean editAreaName(int id) {
-		// TODO Auto-generated method stub
+	public boolean editAreaName(int id, String nome) {
+		try {
+			Connection conn = connect();
+			PreparedStatement stmt = conn.prepareStatement("UPDATE area SET nome = " + nome + " WHERE id = " + id);
+			stmt.executeUpdate();
+			return true;
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
 		return false;
 	}
 
-	@Override
-	public boolean insertArea(int id, String nome, boolean auto, int inf, int sup) {
-		// TODO Auto-generated method stub
+	public boolean insertArea(String nome, boolean auto, int inf, int sup) {
+		try {
+			Connection conn = connect();
+			PreparedStatement stmt = conn.prepareStatement("INSERT INTO area(nome,automode,lvlinf,lvlsup) VALUES ('" + nome + "', " + auto + ", " + inf + ", " + sup + ");");
+			stmt.executeUpdate();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
 		return false;
 	}
 
-	@Override
 	public boolean deleteArea(int id) {
-		// TODO Auto-generated method stub
+		try {
+			Connection conn = connect();
+			PreparedStatement stmt = conn.prepareStatement("SELECT id, idarea FROM misuratore WHERE idarea = " + id);
+			ResultSet misList = stmt.executeQuery();
+			while(misList.next())
+			{
+				stmt = conn.prepareStatement("UPDATE misuratore SET idarea = null WHERE id = " + misList.getInt("id"));
+				stmt.executeUpdate();
+			}
+			stmt = conn.prepareStatement("DELETE area WHERE id = " + id);
+			return true;
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
 		return false;
 	}
 	
