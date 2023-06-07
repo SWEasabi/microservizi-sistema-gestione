@@ -109,12 +109,12 @@ public class Controller {
 	  boolean AddArea(@RequestBody String data) {
 		  
 		JsonObject rq = new Gson().fromJson(data, JsonObject.class);
-		int idArea = Integer.parseInt(rq.get("idarea").toString());
-    	double longitudine = Double.parseDouble(rq.get("longitudine").toString());
-    	double latitudine = Double.parseDouble(rq.get("latitudine").toString());
-    	int valore = Integer.parseInt(rq.get("valore").toString());
+		String nome = rq.get("nome").toString();
+    	boolean auto = Boolean.parseBoolean(rq.get("automode").toString());
+    	int inf = Integer.parseInt(rq.get("lvlinf").toString());
+    	int sup = Integer.parseInt(rq.get("lvlsup").toString());
     	
-		return Context.insertSensor(idArea,longitudine,latitudine,valore);
+		return Context.insertArea(nome, auto, inf, sup);
 	  }  
 	  
 	  @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
@@ -131,7 +131,7 @@ public class Controller {
 	  @PutMapping("/deleteArea/{id}")
 	  boolean deleteArea(@PathVariable int id) {
     	
-		return Context.deleteSensor(id);
+		return Context.deleteArea(id);
 	  }  
 	  
 }

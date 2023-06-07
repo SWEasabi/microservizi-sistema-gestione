@@ -264,7 +264,7 @@ public class LocalDatabaseConnectionService implements DatabaseConnectionService
 	public boolean editAreaName(int id, String nome) {
 		try {
 			Connection conn = connect();
-			PreparedStatement stmt = conn.prepareStatement("UPDATE area SET nome = " + nome + " WHERE id = " + id);
+			PreparedStatement stmt = conn.prepareStatement("UPDATE area SET nome = '" + nome + "' WHERE id = " + id);
 			stmt.executeUpdate();
 			return true;
 		}
@@ -280,6 +280,7 @@ public class LocalDatabaseConnectionService implements DatabaseConnectionService
 			Connection conn = connect();
 			PreparedStatement stmt = conn.prepareStatement("INSERT INTO area(nome,automode,lvlinf,lvlsup) VALUES ('" + nome + "', " + auto + ", " + inf + ", " + sup + ");");
 			stmt.executeUpdate();
+			return true;
 		}
 		catch(SQLException e)
 		{
@@ -298,7 +299,8 @@ public class LocalDatabaseConnectionService implements DatabaseConnectionService
 				stmt = conn.prepareStatement("UPDATE misuratore SET idarea = null WHERE id = " + misList.getInt("id"));
 				stmt.executeUpdate();
 			}
-			stmt = conn.prepareStatement("DELETE area WHERE id = " + id);
+			stmt = conn.prepareStatement("DELETE FROM area WHERE id = " + id);
+			stmt.executeUpdate();
 			return true;
 		}
 		catch(SQLException e)
